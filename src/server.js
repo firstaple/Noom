@@ -15,12 +15,18 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+const onSocketClose = () => {
+  console.log("Disconnected form Browser ❌");
+};
+
+const onSocketMessage = (message) => {
+  console.log(message);
+};
+
 wss.on("connection", (socket) => {
   console.log("Connected to Browser ✅");
-  socket.on("close", () => console.log("Disconnected form Browser ❌"));
-  socket.on("message", (message) => {
-    console.log(String(message));
-  });
+  socket.on("close", () => onSocketClose);
+  socket.on("message", onSocketMessage);
   socket.send("hello!!!");
 });
 
