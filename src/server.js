@@ -26,6 +26,7 @@ wss.on("connection", (socket) => {
   console.log("Connected to Browser ✅");
   socket.on("close", () => onSocketClose);
   socket.on("message", (message) => {
+    message = message.toString("utf-8");
     sockets.forEach((aSocket) => aSocket.send(message));
   });
 });
