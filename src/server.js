@@ -13,6 +13,21 @@ app.get("/*", (_, res) => res.redirect("/"));
 const httpServer = http.createServer(app);
 const wsServer = new Server(httpServer);
 
+const publicRooms = () => {
+  const {
+    sockets: {
+      adapter: { side, rooms },
+    },
+  } = wsServer;
+  const publicRooms = [];
+  rooms.forEach((_, key) => {
+    if (side.get(key) === undefined) {
+      publicRooms.push(key);
+    }
+  });
+  return publicRooms;
+};
+
 wsServer.on("connection", (socket) => {
   socket["nickname"] = "Anon";
   socket.onAny((event) => {
